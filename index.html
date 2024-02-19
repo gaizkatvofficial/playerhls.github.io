@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JWPlayer HLS Responsive dengan Subtitle</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+<style>
+    body{margin:0 auto;}
+</style>
+</head>
+<body>
+<div id="player-container"></div>
+<script>
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    var videoUrl = getParameterByName('video');
+    var imageUrl = getParameterByName('image');
+    var subtitleUrl = getParameterByName('subtitle');
+    
+    if (!videoUrl) {
+        alert('URL video tidak ditemukan dalam parameter.');
+    } else {
+        var player = jwplayer('player-container');
+        player.setup({
+            file: videoUrl,
+            image: imageUrl || 'poster.jpg', // Gunakan nilai dari parameter image jika ada, jika tidak, gunakan poster.jpg
+            aspectratio: '16:9',
+            width: '100%',
+            autostart: false,
+            primary: 'html5',
+            hlshtml: true,
+            stretching: 'uniform',
+            controls: true,
+            playbackRateControls: [0.5, 1, 1.5, 2], // Menampilkan kontrol kecepatan pemutaran
+            responsive: true, // Membuat pemutar responsif
+            tracks: [{ 
+                file: subtitleUrl || 'subtitle.vtt', // Gunakan nilai dari parameter subtitle jika ada, jika tidak, gunakan subtitle.vtt
+                label: 'Indonesia', // Label subtitle yang akan ditampilkan di pemutar
+                kind: 'captions',
+                default: true
+            }],
+            //sharing: {
+            //    link: window.location.href, // Berbagi link ke halaman saat ini
+            //    sites: ['facebook', 'twitter', 'linkedin', 'email'] // Daftar situs berbagi yang ingin ditampilkan
+            //}
+        });
+    }
+</script>
+</body>
+</html>
